@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import './App.css';
 
 function App() {
-  let locationPing;
-  let [totalDistance, setTotalDistance] = useState(0);
+  const interval = useRef(null);
+  const [totalDistance, setTotalDistance] = useState(0);
 
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371e3; // metres
@@ -24,12 +24,11 @@ function App() {
   const handleStart = () => {
     let lastLon, lastLat;
 
-    locationPing = setInterval(() => {
+    interval.current = setInterval(() => {
       navigator.geolocation.getCurrentPosition(data => {
         //console.log(data)
         if(lastLon && lastLat) {
           setTotalDistance(prevState => prevState + calculateDistance(lastLat, lastLon, data.coords.latitude, data.coords.longitude));
-          console.log(totalDistance)
         }
         lastLat = data.coords.latitude
         lastLon = data.coords.longitude
@@ -38,9 +37,7 @@ function App() {
   };
 
   const handleEnd = () => {
-    if(locationPing) {
-      clearInterval(locationPing)
-    }
+    clearInterval(interval.current)
   }
   return (
     <div className="App">
