@@ -1,8 +1,9 @@
+import { useState } from 'react';
 import './App.css';
 
 function App() {
   let locationPing;
-  let totalDistance = 0;
+  let [totalDistance, setTotalDistance] = useState(0);
 
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371e3; // metres
@@ -27,7 +28,7 @@ function App() {
       navigator.geolocation.getCurrentPosition(data => {
         //console.log(data)
         if(lastLon && lastLat) {
-          totalDistance += calculateDistance(lastLat, lastLon, data.coords.latitude, data.coords.longitude);
+          setTotalDistance(prevState => prevState + calculateDistance(lastLat, lastLon, data.coords.latitude, data.coords.longitude));
           console.log(totalDistance)
         }
         lastLat = data.coords.latitude
