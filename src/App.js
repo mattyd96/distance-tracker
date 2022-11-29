@@ -36,9 +36,9 @@ function App() {
       err => {
         console.log(err)
       },
-      {enableHighAccuracy: true, maximumAge: 1000, timeout: 10000}
+      {enableHighAccuracy: true, maximumAge: 30000}
       )
-    },1000)
+    },5000)
   };
 
   const handleEnd = () => {
