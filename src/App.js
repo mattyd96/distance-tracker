@@ -4,6 +4,7 @@ import './App.css';
 function App() {
   const interval = useRef(null);
   const [totalDistance, setTotalDistance] = useState(0);
+  const [tracking, setTracking] = useState(false);
 
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371e3; // metres
@@ -25,25 +26,32 @@ function App() {
     let lastLon, lastLat;
 
     interval.current = setInterval(() => {
+      setTracking(true);
       navigator.geolocation.getCurrentPosition(data => {
-        //console.log(data)
         if(lastLon && lastLat) {
           setTotalDistance(prevState => prevState + calculateDistance(lastLat, lastLon, data.coords.latitude, data.coords.longitude));
         }
-        lastLat = data.coords.latitude
-        lastLon = data.coords.longitude
+        lastLat = data.coords.latitude;
+        lastLon = data.coords.longitude;
       })
     },1000)
   };
 
   const handleEnd = () => {
-    clearInterval(interval.current)
+    setTracking(false);
+    clearInterval(interval.current);
+  }
+
+  const handleReset = () => {
+    setTotalDistance(0)
   }
   return (
     <div className="App">
-      <p>Your totalDistance is { totalDistance } metres</p>
+      <p>Your total distance is { totalDistance } metres</p>
       <button onClick={handleStart}>Start Distance Tracking</button>
       <button onClick={handleEnd}>Stop Distance Tracking</button>
+      <button onClick={handleReset}>Reset Distance</button>
+      {tracking ? <p>Tracking</p> : <p>Not tracking</p>}
     </div>
   );
 }
