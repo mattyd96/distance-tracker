@@ -36,7 +36,7 @@ function App() {
       err => {
         console.log(err)
       },
-      {enableHighAccuracy: true, maximumAge: 1000}
+      {enableHighAccuracy: true, maximumAge: 1000, timeout: 10000}
       )
     },1000)
   };
